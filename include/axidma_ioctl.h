@@ -13,6 +13,7 @@
 #define AXIDMA_IOCTL_H_
 
 #include <asm/ioctl.h>              // IOCTL macros
+#include <linux/types.h>            // __u* types
 
 /*----------------------------------------------------------------------------
  * IOCTL Defintions
@@ -74,6 +75,7 @@ struct axidma_chan {
     int channel_id;                 // The identifier for the device
     const char *name;               // Name of the channel (ignore)
     struct dma_chan *chan;          // The DMA channel (ignore)
+    __u64 dma_addr;                 // The address of the DMA device
 };
 
 struct axidma_num_channels {

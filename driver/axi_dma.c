@@ -15,6 +15,7 @@
 #include <linux/slab.h>             // Allocation functions
 #include <linux/stat.h>             // Module parameter permission values
 #include <linux/platform_device.h>  // Platform device definitions
+#include <linux/of_address.h>
 
 // Local dependencies
 #include "axidma.h"                 // Internal definitions
@@ -95,9 +96,11 @@ static int axidma_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id axidma_compatible_of_ids[] = {
-    { .compatible = "xlnx,axidma-chrdev" },
-    {}
+    { .compatible = "xlnx,axidma-chrdev", },
+    {},
 };
+
+MODULE_DEVICE_TABLE(of, axidma_compatible_of_ids);
 
 static struct platform_driver axidma_driver = {
     .driver = {

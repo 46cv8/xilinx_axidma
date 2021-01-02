@@ -12,6 +12,7 @@
 
 // Kernel Dependencies
 #include <linux/of.h>               // Device tree parsing functions
+#include <linux/of_address.h>       // Device tree memory parsing functions
 #include <linux/platform_device.h>  // Platform device definitions
 
 // Local Dependencies
@@ -82,6 +83,7 @@ static int axidma_of_parse_channel(struct device_node *dma_node, int channel,
 {
     int rc;
     struct device_node *dma_chan_node;
+    struct resource dma_res;
     u32 channel_id;
 
     // Verify that the DMA node has two channel (child) nodes, one for TX and RX
@@ -117,6 +119,13 @@ static int axidma_of_parse_channel(struct device_node *dma_node, int channel,
         return -EINVAL;
     }
     chan->channel_id = channel_id;
+
+    rc = of_address_to_resource(dma_node, 0, &dma_res);
+    if (rc) {
+        axidma_err("Unable to read the memory resource for the dma node.\n");
+        return -EINVAL;
+    }
+    chan->dma_addr = dma_res.start;
 
     // Use the compatible string to determine the channel's information
     rc = axidma_parse_compatible_property(dma_chan_node, chan, dev);
